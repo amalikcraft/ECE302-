@@ -1,0 +1,213 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Project5</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-05-07"><meta name="DC.source" content="Project5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Part 2</a></li></ul></div><pre class="codeinput"><span class="comment">%Ahmad Malik</span>
+<span class="comment">%ECE302-1</span>
+<span class="comment">%Project 5</span>
+
+clc; clear; close <span class="string">all</span>;
+
+
+<span class="comment">%{
+</span><span class="comment">In this project, an iid signal s[n] is sent through a filter c[n] which is
+</span><span class="comment">then combined with zero mean gaussian noise d[n]. Thus we recieve a signal
+</span><span class="comment">r[n]. To recover signal s[n], we pass r[n] through a wiener filter h[n] to
+</span><span class="comment">get s^[n] which is an estimate of the original signal s[n]. To find the
+</span><span class="comment">best wiener filter given it's length, we must compute the normal equations
+</span><span class="comment">that require finding the cross and auto correlations of the sent and
+</span><span class="comment">recieved signal. We can measure how well the filter performs by computing
+</span><span class="comment">the MSE.
+</span><span class="comment">%}</span>
+</pre><h2 id="2">Part 2</h2><pre class="codeinput">C = [1, 0.2, 0.4]; <span class="comment">% C[n]</span>
+N = [4, 6, 10]; <span class="comment">%Length of filter</span>
+variance = .5; <span class="comment">%variance</span>
+sigma = sqrt(variance); <span class="comment">%covariance</span>
+mu = 0;
+
+<span class="comment">%discrete random signal +/- 1</span>
+s = randi(2, [1,1e6]);
+s = -1*double(s==2) + double(s==1);
+
+<span class="comment">%output of first filter:  r = filter{s} + d</span>
+r = filter(C, 1, s) + normrnd(mu, sigma , 1, 1e6);
+
+<span class="comment">%MSE for N = 4,6,10</span>
+MSE = zeros(1,3);
+MSE(1) = wienerMSE(s,r,N(1));
+MSE(2) = wienerMSE(s,r,N(2));
+MSE(3) = wienerMSE(s,r,N(3));
+
+T = table([MSE(1); MSE(2); MSE(3)], <span class="string">'RowNames'</span>, {<span class="string">'N=4'</span>, <span class="string">'N=6'</span>, <span class="string">'N=10'</span>});
+T.Properties.VariableNames = (<span class="string">"MSE"</span>)
+
+<span class="comment">%MSE function</span>
+<span class="keyword">function</span> MSE = wienerMSE(s,r,N)
+    Rsr = zeros(N, 1);
+    Rrr = zeros(N, 1);
+    <span class="keyword">for</span> i = 1:N
+        <span class="comment">%cross correlation</span>
+        Rsr(i) = mean(s(i:end) .* r(1:end + 1 - i));
+        <span class="comment">%auto correlation</span>
+        Rrr(i) = mean(r(i:end) .* r(1:end + 1 - i));
+    <span class="keyword">end</span>
+    <span class="comment">%generating matrix for normal equations</span>
+    Rrr_Matrix = toeplitz(Rrr);
+
+    <span class="comment">%solve for h</span>
+    h = inv(Rrr_Matrix)* Rsr;
+
+    <span class="comment">%computing s^[n]</span>
+    s_hat = filter(h , 1, r);
+
+    <span class="comment">%computing MSE</span>
+    MSE = mean((s - s_hat) .^ 2);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+T =
+
+  3&times;1 table
+
+              MSE  
+            _______
+
+    N=4     0.36293
+    N=6     0.36133
+    N=10    0.36123
+
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%Ahmad Malik
+%ECE302-1
+%Project 5
+
+clc; clear; close all;
+
+
+%{
+In this project, an iid signal s[n] is sent through a filter c[n] which is 
+then combined with zero mean gaussian noise d[n]. Thus we recieve a signal 
+r[n]. To recover signal s[n], we pass r[n] through a wiener filter h[n] to 
+get s^[n] which is an estimate of the original signal s[n]. To find the 
+best wiener filter given it's length, we must compute the normal equations 
+that require finding the cross and auto correlations of the sent and
+recieved signal. We can measure how well the filter performs by computing 
+the MSE.
+%}
+
+
+%% Part 2
+
+C = [1, 0.2, 0.4]; % C[n]
+N = [4, 6, 10]; %Length of filter
+variance = .5; %variance
+sigma = sqrt(variance); %covariance
+mu = 0; 
+
+%discrete random signal +/- 1
+s = randi(2, [1,1e6]);
+s = -1*double(s==2) + double(s==1);
+
+%output of first filter:  r = filter{s} + d
+r = filter(C, 1, s) + normrnd(mu, sigma , 1, 1e6);
+
+%MSE for N = 4,6,10
+MSE = zeros(1,3);
+MSE(1) = wienerMSE(s,r,N(1));
+MSE(2) = wienerMSE(s,r,N(2));
+MSE(3) = wienerMSE(s,r,N(3));
+
+T = table([MSE(1); MSE(2); MSE(3)], 'RowNames', {'N=4', 'N=6', 'N=10'});
+T.Properties.VariableNames = ("MSE")
+
+%MSE function
+function MSE = wienerMSE(s,r,N)
+    Rsr = zeros(N, 1);
+    Rrr = zeros(N, 1);
+    for i = 1:N
+        %cross correlation
+        Rsr(i) = mean(s(i:end) .* r(1:end + 1 - i));
+        %auto correlation
+        Rrr(i) = mean(r(i:end) .* r(1:end + 1 - i));
+    end
+    %generating matrix for normal equations
+    Rrr_Matrix = toeplitz(Rrr);
+
+    %solve for h 
+    h = inv(Rrr_Matrix)* Rsr; 
+
+    %computing s^[n]
+    s_hat = filter(h , 1, r);
+
+    %computing MSE
+    MSE = mean((s - s_hat) .^ 2);
+end
+
+
+##### SOURCE END #####
+--></body></html>

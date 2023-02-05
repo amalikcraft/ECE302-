@@ -1,0 +1,456 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Project4</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-04-25"><meta name="DC.source" content="Project4.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Question 1</a></li><li><a href="#3">Question 2</a></li></ul></div><pre class="codeinput"><span class="comment">%Ahmad Malik</span>
+<span class="comment">%ECE302</span>
+<span class="comment">%Project 4: Detection</span>
+clc;
+clear;
+close <span class="string">all</span>;
+</pre><h2 id="2">Question 1</h2><pre class="codeinput">fprintf(<span class="string">'Question 1 \n\n'</span>);
+
+<span class="comment">%a</span>
+p0 = 0.8; <span class="comment">%prob target is not present</span>
+p1 = 0.2; <span class="comment">%prob target is present</span>
+A_const = 1; <span class="comment">%A = 1 when present=</span>
+N = 1000; <span class="comment">%  num of iterations</span>
+var = 1; <span class="comment">%Variance of X</span>
+sigmax = sqrt(var);
+
+<span class="comment">%Random A vector where A=1 20% of the time and A=0 80% of the time</span>
+A = double(~logical((randi(5, N, 1))-1));
+<span class="comment">%Random X vector, gaussian</span>
+X = normrnd(0, sigmax, [N, 1]);
+Y = A + X;
+
+<span class="comment">%MAP rule</span>
+<span class="comment">%Computing Threshold</span>
+threshold = (A_const / 2) + ((sigmax^2 / A_const) * log(p0 / p1)); <span class="comment">%equation 8.37</span>
+<span class="comment">%Computing Experimental Error Relative to Threshold</span>
+Exp_Error = sum((Y &gt; threshold) ~= A) / N;
+<span class="comment">%Computing Theoretical Error using cdf curves;</span>
+Theo_Error = p0 * (1 - normcdf(threshold, 0, sigmax)) + p1 * normcdf(threshold, A_const, sigmax);
+
+fprintf(<span class="string">'a)\nTheoretical Error: %0.4f \nExperimental Error: %0.4f\n'</span>, Theo_Error,Exp_Error);
+
+<span class="comment">%b and C)</span>
+
+fprintf(<span class="string">'c) \n'</span>);
+SNR = [0.5, 1, 1.5]; <span class="comment">%Testing SNR</span>
+threshold_test = linspace(-10, 10, 1000); <span class="comment">%threshold testing</span>
+pf = zeros(1000, 3);
+Pd = zeros(1000, 3);
+<span class="keyword">for</span> i = 1:3
+    A_const = var * SNR(i);
+    A = A_const* double(~logical((randi(5, N, 1))-1)); <span class="comment">%Randomly occuring A vector scaled by SNR</span>
+    Y = A + X;
+    <span class="comment">%MAP Rule: C01 = 10*C10</span>
+    threshold = (A_const / 2) + ((sigmax^2 / A_const) * log(p0 / (p1*10))); <span class="comment">%computing threshold</span>
+    fprintf(<span class="string">'Threshold value for SNR(%0.1f)if missing target is 10 times worse: %0.4f \n'</span>,SNR(i),threshold); <span class="comment">%part c</span>
+    <span class="keyword">for</span> x = 1:1000
+        <span class="comment">%Finding value that minimizes the conditional risk</span>
+        F10(i) = sum((Y &gt; threshold) &amp; (A ~= A_const)) / sum((A == 0));
+        D10(i) = sum((Y &gt; threshold) &amp; (A == A_const)) / sum((A == A_const));
+        <span class="comment">%computing false positive probability Pf &amp; true positive probability Pd</span>
+        Pf(x,i) = sum((Y &gt; threshold_test(x)) &amp; (A ~= A_const)) / sum((A == 0));
+        Pd(x,i) = sum((Y &gt; threshold_test(x)) &amp; (A == A_const)) / sum((A == A_const));
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="comment">%Plotting ROC with their associated SNR values and the point where the conditional risk is minimized (part c)</span>
+figure;
+set(groot,<span class="string">'defaultLineMarkerSize'</span>,10);
+plot(Pf(:,1), Pd(:,1), <span class="string">'-r'</span>, F10(1), D10(1), <span class="string">'-r*'</span>,<span class="keyword">...</span>
+     Pf(:,2), Pd(:,2), <span class="string">'-b'</span>, F10(2), D10(2), <span class="string">'-b*'</span>,<span class="keyword">...</span>
+     Pf(:,3), Pd(:,3), <span class="string">'-g'</span>, F10(3), D10(3), <span class="string">'-g*'</span>, <span class="string">'linewidth'</span>, 1);
+ xlabel(<span class="string">'Pf'</span>);
+ ylabel(<span class="string">'Pd'</span>);
+ title(<span class="string">'Reciever Operating Curve for SNR with \eta'</span>)
+ legend(<span class="string">"SNR = 0.5"</span>, <span class="string">"  \eta  "</span>,<span class="string">"SNR = 1.0"</span>, <span class="string">"  \eta  "</span>,<span class="string">"SNR = 1.5"</span>, <span class="string">"  \eta  "</span>, <span class="string">'Location'</span>, <span class="string">'southeast'</span>);
+ xlim([0 1.0]);
+ ylim([0 1.1]);
+
+<span class="comment">%e)</span>
+<span class="comment">%sigma and var of X and Z</span>
+var_x = 1;
+var_z = 25;
+sigma_x = sqrt(var_x);
+sigma_z = sqrt(var_z);
+
+<span class="comment">%Generating New Model</span>
+A = double(~logical((randi(5, N, 1))-1));
+X = normrnd(0, sigma_x, [N, 1]);
+Z = normrnd(0, sigma_z, [N, 1]);
+Y = A + (X .* A) + (Z .* (~A));
+
+<span class="comment">%Theoretical Error</span>
+<span class="comment">%Finding Threshold</span>
+threshold  = 2 * ((sigma_x^2 * sigma_z^2) / (sigma_z^2 - sigma_x^2)) * log((p1 * sigma_z) / (p0 * sigma_x));
+<span class="comment">%Finding probability of false detection using p01 and p10</span>
+p01 = 2 * (1 - normcdf(threshold, 0, sigma_x));
+p10 = normcdf(threshold, 0, sigma_z) - normcdf(-threshold, 0, sigma_z);
+theo_error = p10 * p0 + p01 * p1;
+
+<span class="comment">%experimental probability of error</span>
+<span class="comment">%If Y has any imaginary components, target is present, otherwise it is not</span>
+exp_error = sum((imag(Y) ~= 0) ~= (A == 1)) / N;
+fprintf(<span class="string">'\ne)\nTheoretical Probability of Error: %.3f\n'</span>, theo_error);
+fprintf(<span class="string">'Experimental Probability of Error: %.3f\n'</span>, exp_error);
+
+<span class="comment">%Generating data for ROC plot with varying var_z/varz_x ratio</span>
+var_z = [5, 15, 25];
+sigma_z = sqrt(var_z);
+<span class="comment">%var_z/varz_x ratio</span>
+ratio = zeros(3, 1, N);
+n = linspace(-5,3,N);
+pf = zeros(3, 1, N);
+pd = zeros(3, 1, N);
+
+<span class="keyword">for</span> i = 1:3
+    A = double(~logical((randi(5, N, 1))-1));
+    X = normrnd(0, sigma_x, [N, 1]);
+    Z = normrnd(0, sigma_z(i), [N, 1]);
+    <span class="comment">%New Model</span>
+    Y = A + (X .* A) + (Z .* (~A));
+    <span class="comment">%Computing ROC values</span>
+    pf(i,:,:) = sum(and((p1 * (1/sqrt(var_x *2*pi)) * exp(-((Y - A_const).^2) / (2 * var_x))) &gt;= <span class="keyword">...</span>
+     (p0*(1/sqrt(var_z(i)*2*pi)) * exp(-((Y-A_const).^2)/(2*var_z(i))))*n, ~A))/sum(~A);
+    pd(i,:,:) = sum(and((p1 * (1/sqrt(var_x *2*pi)) * exp(-((Y - A_const).^2) / (2 * var_x))) &gt;= <span class="keyword">...</span>
+     (p0*(1/sqrt(var_z(i)*2*pi)) * exp(-((Y-A_const).^2)/(2*var_z(i))))*n, A))/sum(A);
+    <span class="comment">%var_z/varz_x ratio</span>
+    ratio(i) = var_z(i) / var_x;
+<span class="keyword">end</span>
+
+<span class="comment">%ROC Plot</span>
+figure;
+plot(reshape(pf(1, :, :), [1,N]), reshape(pd(1, :, :), [1,N]),<span class="keyword">...</span>
+     reshape(pf(2, :, :), [1,N]), reshape(pd(2, :, :), [1,N]),<span class="keyword">...</span>
+     reshape(pf(3, :, :), [1,N]), reshape(pd(3, :, :), [1,N]),<span class="string">'linewidth'</span>, 1);
+xlabel(<span class="string">'Pf'</span>)
+ylabel(<span class="string">'Pd'</span>)
+title(<span class="string">'Receiver Operating Curve with varying \sigma_z^2/\sigma^2 ratio'</span>)
+xlim([0 1.0]);
+ylim([0 1.1]);
+legend([<span class="string">'\sigma_z^2/\sigma^2= '</span>,num2str(ratio(1))],[<span class="string">'\sigma_z^2/\sigma^2= '</span>,num2str(ratio(2))],<span class="keyword">...</span>
+       [<span class="string">'\sigma_z^2/\sigma^2= '</span>,num2str(ratio(3))], <span class="string">'Location'</span>, <span class="string">'southeast'</span>);
+</pre><pre class="codeoutput">Question 1 
+
+a)
+Theoretical Error: 0.1862 
+Experimental Error: 0.1770
+c) 
+Threshold value for SNR(0.5)if missing target is 10 times worse: -1.5826 
+Threshold value for SNR(1.0)if missing target is 10 times worse: -0.4163 
+Threshold value for SNR(1.5)if missing target is 10 times worse: 0.1391 
+
+e)
+Theoretical Probability of Error: 0.188
+Experimental Probability of Error: 0.194
+</pre><img vspace="5" hspace="5" src="Project4_01.png" alt=""> <img vspace="5" hspace="5" src="Project4_02.png" alt=""> <h2 id="3">Question 2</h2><pre class="codeinput">data = load(<span class="string">'Iris.mat'</span>);
+numOfSamples = size(data.features, 1);
+half = numOfSamples/2;
+
+<span class="comment">% shuffle data to keep training random</span>
+shuffled = randperm(size(data.features, 1));
+shuffled_features = data.features(shuffled, :);
+shuffled_labels = data.labels(shuffled, :);
+
+<span class="comment">%training</span>
+train_features = shuffled_features(1:half, :);
+train_labels = shuffled_labels(1:half);
+
+<span class="comment">%testing</span>
+test_features = shuffled_features(half+1:numOfSamples, :);
+test_labels = shuffled_labels(half+1:numOfSamples);
+
+<span class="comment">%Categorizing</span>
+Cat1 = train_features(train_labels == 1, :);
+Cat2 = train_features(train_labels == 2, :);
+Cat3 = train_features(train_labels == 3, :);
+
+<span class="comment">%calculating mean</span>
+m1 = [mean(Cat1(:, 1)), mean(Cat1(:, 2)), mean(Cat1(:, 3)), mean(Cat1(:, 4))];
+m2 = [mean(Cat2(:, 1)), mean(Cat2(:, 2)), mean(Cat2(:, 3)), mean(Cat2(:, 4))];
+m3 = [mean(Cat3(:, 1)), mean(Cat3(:, 2)), mean(Cat3(:, 3)), mean(Cat3(:, 4))];
+
+<span class="comment">%variances</span>
+cov1 = cov(Cat1);
+cov2 = cov(Cat2);
+cov3 = cov(Cat3);
+
+<span class="comment">%Calculating likelihood</span>
+likelihood = [mvnpdf(test_features, m1, cov1),mvnpdf(test_features, m2, cov2),mvnpdf(test_features, m3, cov3)];
+<span class="comment">%the maximum</span>
+[~, output] = max(likelihood, [], 2);
+
+<span class="comment">%calculating error</span>
+error = 1- mean(output == test_labels);
+fprintf(<span class="string">'\n\nQuestion 2 \n\nTotal Probability of Error: %0.4f'</span>, error);
+
+<span class="comment">%Confusion Matrix</span>
+figure;
+confusionchart(confusionmat(test_labels, output));
+</pre><pre class="codeoutput">
+
+Question 2 
+
+Total Probability of Error: 0.0400</pre><img vspace="5" hspace="5" src="Project4_03.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%Ahmad Malik
+%ECE302
+%Project 4: Detection
+clc;
+clear;
+close all;
+
+%% Question 1
+fprintf('Question 1 \n\n');
+
+%a
+p0 = 0.8; %prob target is not present
+p1 = 0.2; %prob target is present
+A_const = 1; %A = 1 when present=
+N = 1000; %  num of iterations
+var = 1; %Variance of X
+sigmax = sqrt(var); 
+
+%Random A vector where A=1 20% of the time and A=0 80% of the time
+A = double(~logical((randi(5, N, 1))-1));
+%Random X vector, gaussian 
+X = normrnd(0, sigmax, [N, 1]); 
+Y = A + X;
+
+%MAP rule
+%Computing Threshold
+threshold = (A_const / 2) + ((sigmax^2 / A_const) * log(p0 / p1)); %equation 8.37
+%Computing Experimental Error Relative to Threshold
+Exp_Error = sum((Y > threshold) ~= A) / N;
+%Computing Theoretical Error using cdf curves;
+Theo_Error = p0 * (1 - normcdf(threshold, 0, sigmax)) + p1 * normcdf(threshold, A_const, sigmax); 
+
+fprintf('a)\nTheoretical Error: %0.4f \nExperimental Error: %0.4f\n', Theo_Error,Exp_Error);
+
+%b and C)
+
+fprintf('c) \n');
+SNR = [0.5, 1, 1.5]; %Testing SNR
+threshold_test = linspace(-10, 10, 1000); %threshold testing
+pf = zeros(1000, 3);
+Pd = zeros(1000, 3);
+for i = 1:3
+    A_const = var * SNR(i);
+    A = A_const* double(~logical((randi(5, N, 1))-1)); %Randomly occuring A vector scaled by SNR
+    Y = A + X; 
+    %MAP Rule: C01 = 10*C10
+    threshold = (A_const / 2) + ((sigmax^2 / A_const) * log(p0 / (p1*10))); %computing threshold               
+    fprintf('Threshold value for SNR(%0.1f)if missing target is 10 times worse: %0.4f \n',SNR(i),threshold); %part c
+    for x = 1:1000
+        %Finding value that minimizes the conditional risk
+        F10(i) = sum((Y > threshold) & (A ~= A_const)) / sum((A == 0));
+        D10(i) = sum((Y > threshold) & (A == A_const)) / sum((A == A_const));
+        %computing false positive probability Pf & true positive probability Pd 
+        Pf(x,i) = sum((Y > threshold_test(x)) & (A ~= A_const)) / sum((A == 0));
+        Pd(x,i) = sum((Y > threshold_test(x)) & (A == A_const)) / sum((A == A_const));
+    end
+end
+%Plotting ROC with their associated SNR values and the point where the conditional risk is minimized (part c)
+figure;
+set(groot,'defaultLineMarkerSize',10);
+plot(Pf(:,1), Pd(:,1), '-r', F10(1), D10(1), '-r*',...
+     Pf(:,2), Pd(:,2), '-b', F10(2), D10(2), '-b*',...
+     Pf(:,3), Pd(:,3), '-g', F10(3), D10(3), '-g*', 'linewidth', 1);
+ xlabel('Pf');
+ ylabel('Pd');
+ title('Reciever Operating Curve for SNR with \eta')
+ legend("SNR = 0.5", "  \eta  ","SNR = 1.0", "  \eta  ","SNR = 1.5", "  \eta  ", 'Location', 'southeast');
+ xlim([0 1.0]);
+ ylim([0 1.1]);
+
+%e) 
+%sigma and var of X and Z
+var_x = 1;
+var_z = 25;
+sigma_x = sqrt(var_x);
+sigma_z = sqrt(var_z);
+
+%Generating New Model
+A = double(~logical((randi(5, N, 1))-1));
+X = normrnd(0, sigma_x, [N, 1]); 
+Z = normrnd(0, sigma_z, [N, 1]); 
+Y = A + (X .* A) + (Z .* (~A));
+
+%Theoretical Error
+%Finding Threshold
+threshold  = 2 * ((sigma_x^2 * sigma_z^2) / (sigma_z^2 - sigma_x^2)) * log((p1 * sigma_z) / (p0 * sigma_x));
+%Finding probability of false detection using p01 and p10
+p01 = 2 * (1 - normcdf(threshold, 0, sigma_x));
+p10 = normcdf(threshold, 0, sigma_z) - normcdf(-threshold, 0, sigma_z);
+theo_error = p10 * p0 + p01 * p1;
+
+%experimental probability of error
+%If Y has any imaginary components, target is present, otherwise it is not
+exp_error = sum((imag(Y) ~= 0) ~= (A == 1)) / N;
+fprintf('\ne)\nTheoretical Probability of Error: %.3f\n', theo_error);
+fprintf('Experimental Probability of Error: %.3f\n', exp_error);
+
+%Generating data for ROC plot with varying var_z/varz_x ratio
+var_z = [5, 15, 25];
+sigma_z = sqrt(var_z);
+%var_z/varz_x ratio
+ratio = zeros(3, 1, N);
+n = linspace(-5,3,N);
+pf = zeros(3, 1, N);
+pd = zeros(3, 1, N);
+
+for i = 1:3
+    A = double(~logical((randi(5, N, 1))-1));
+    X = normrnd(0, sigma_x, [N, 1]); 
+    Z = normrnd(0, sigma_z(i), [N, 1]); 
+    %New Model
+    Y = A + (X .* A) + (Z .* (~A));
+    %Computing ROC values
+    pf(i,:,:) = sum(and((p1 * (1/sqrt(var_x *2*pi)) * exp(-((Y - A_const).^2) / (2 * var_x))) >= ...
+     (p0*(1/sqrt(var_z(i)*2*pi)) * exp(-((Y-A_const).^2)/(2*var_z(i))))*n, ~A))/sum(~A);
+    pd(i,:,:) = sum(and((p1 * (1/sqrt(var_x *2*pi)) * exp(-((Y - A_const).^2) / (2 * var_x))) >= ...
+     (p0*(1/sqrt(var_z(i)*2*pi)) * exp(-((Y-A_const).^2)/(2*var_z(i))))*n, A))/sum(A);   
+    %var_z/varz_x ratio
+    ratio(i) = var_z(i) / var_x;
+end
+
+%ROC Plot
+figure;
+plot(reshape(pf(1, :, :), [1,N]), reshape(pd(1, :, :), [1,N]),...
+     reshape(pf(2, :, :), [1,N]), reshape(pd(2, :, :), [1,N]),...
+     reshape(pf(3, :, :), [1,N]), reshape(pd(3, :, :), [1,N]),'linewidth', 1);
+xlabel('Pf')
+ylabel('Pd')
+title('Receiver Operating Curve with varying \sigma_z^2/\sigma^2 ratio')
+xlim([0 1.0]);
+ylim([0 1.1]);
+legend(['\sigma_z^2/\sigma^2= ',num2str(ratio(1))],['\sigma_z^2/\sigma^2= ',num2str(ratio(2))],...
+       ['\sigma_z^2/\sigma^2= ',num2str(ratio(3))], 'Location', 'southeast');
+
+
+   
+  
+%% Question 2
+
+data = load('Iris.mat');
+numOfSamples = size(data.features, 1); 
+half = numOfSamples/2;
+
+% shuffle data to keep training random
+shuffled = randperm(size(data.features, 1));
+shuffled_features = data.features(shuffled, :);
+shuffled_labels = data.labels(shuffled, :);
+
+%training
+train_features = shuffled_features(1:half, :);
+train_labels = shuffled_labels(1:half);
+
+%testing
+test_features = shuffled_features(half+1:numOfSamples, :);
+test_labels = shuffled_labels(half+1:numOfSamples);
+
+%Categorizing 
+Cat1 = train_features(train_labels == 1, :);
+Cat2 = train_features(train_labels == 2, :);
+Cat3 = train_features(train_labels == 3, :);
+
+%calculating mean
+m1 = [mean(Cat1(:, 1)), mean(Cat1(:, 2)), mean(Cat1(:, 3)), mean(Cat1(:, 4))];
+m2 = [mean(Cat2(:, 1)), mean(Cat2(:, 2)), mean(Cat2(:, 3)), mean(Cat2(:, 4))];
+m3 = [mean(Cat3(:, 1)), mean(Cat3(:, 2)), mean(Cat3(:, 3)), mean(Cat3(:, 4))];
+
+%variances
+cov1 = cov(Cat1);
+cov2 = cov(Cat2);
+cov3 = cov(Cat3);
+
+%Calculating likelihood
+likelihood = [mvnpdf(test_features, m1, cov1),mvnpdf(test_features, m2, cov2),mvnpdf(test_features, m3, cov3)];
+%the maximum
+[~, output] = max(likelihood, [], 2);
+
+%calculating error
+error = 1- mean(output == test_labels);
+fprintf('\n\nQuestion 2 \n\nTotal Probability of Error: %0.4f', error);
+
+%Confusion Matrix
+figure;
+confusionchart(confusionmat(test_labels, output));
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

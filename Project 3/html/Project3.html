@@ -1,0 +1,344 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Project3</title><meta name="generator" content="MATLAB 9.8"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-04-08"><meta name="DC.source" content="Project3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Question 1</a></li><li><a href="#3">Question 2</a></li><li><a href="#4">Functions</a></li></ul></div><pre class="codeinput"><span class="comment">%Ahmad Malik    4/5/22</span>
+<span class="comment">%ECE302-1</span>
+<span class="comment">%Keene</span>
+<span class="comment">%Project 3</span>
+
+clc; clear; close <span class="string">all</span>;
+</pre><h2 id="2">Question 1</h2><pre class="codeinput"><span class="comment">%number of samples</span>
+N = 5e5;
+<span class="comment">%number of observations</span>
+obs = 5:15;
+<span class="comment">%alpha and lambda parameters</span>
+alpha = [0.35, 0.7, 1];
+lambda = [0.35, 0.7, 1];
+
+<span class="comment">%generating the MSE, Bias, and Variance of each distribution given the</span>
+<span class="comment">%parameters above. This is done using the two generating functions.</span>
+exponential_lambda_1 = generate_exponential(N, obs,lambda(1));
+exponential_lambda_2 = generate_exponential(N, obs,lambda(2));
+exponential_lambda_3 = generate_exponential(N, obs,lambda(3));
+rayleigh_aplha_1 = generate_rayleigh(N,obs,alpha(1));
+rayleigh_aplha_2 = generate_rayleigh(N,obs,alpha(2));
+rayleigh_aplha_3 = generate_rayleigh(N,obs,alpha(3));
+
+<span class="comment">%Subplot that compares each distributions MSE</span>
+figure;
+subplot(1,2,1);
+plot(obs, exponential_lambda_1(1,:), obs, exponential_lambda_2(1,:), obs,exponential_lambda_3(1,:));
+title(<span class="string">"MSE for Exponential"</span>);
+xlabel(<span class="string">"Number of Observations"</span>);
+ylabel(<span class="string">"MSE"</span>);
+legend(<span class="string">"\lambda = 0.35"</span> , <span class="string">"\lambda = 0.7"</span> ,<span class="string">"\lambda = 1.0"</span>);
+xlim([5,15]);
+subplot(1,2,2);
+plot(obs, rayleigh_aplha_1(1,:), obs, rayleigh_aplha_2(1,:), obs, rayleigh_aplha_3(1,:));
+title(<span class="string">"MSE for Rayleigh"</span>);
+xlabel(<span class="string">"Number of Observations"</span>);
+ylabel(<span class="string">"MSE"</span>);
+legend(<span class="string">"\alpha = 0.35"</span> ,<span class="string">"\alpha = 0.7"</span>, <span class="string">"\alpha = 1.0"</span>);
+
+<span class="comment">%Subplot that compares each distributions Bias</span>
+figure;
+subplot(1,2,1);
+plot(obs, exponential_lambda_1(2,:), obs, exponential_lambda_2(2,:), obs,exponential_lambda_3(2,:));
+title(<span class="string">"Bias for Exponential"</span>);
+xlabel(<span class="string">"Number of Observations"</span>);
+ylabel(<span class="string">"Bias"</span>);
+legend(<span class="string">"\lambda = 0.35"</span>, <span class="string">"\lambda = 0.7"</span>, <span class="string">"\lambda = 1.0"</span>);
+xlim([5,15]);
+subplot(1,2,2);
+plot(obs, rayleigh_aplha_1(2,:), obs, rayleigh_aplha_2(2,:), obs, rayleigh_aplha_3(2,:));
+title(<span class="string">"Bias for Rayleigh"</span>);
+xlabel(<span class="string">"Number of Observations"</span>);
+ylabel(<span class="string">"Bias"</span>);
+legend(<span class="string">"\alpha = 0.35"</span>, <span class="string">"\alpha = 0.7"</span>, <span class="string">"\alpha = 1.0"</span>);
+
+<span class="comment">%Subplot that compares each distributions Variance</span>
+figure;
+subplot(1,2,1);
+plot(obs, exponential_lambda_1(3,:), obs, exponential_lambda_2(3,:), obs,exponential_lambda_3(3,:));
+title(<span class="string">"Variance for Exponential"</span>);
+xlabel(<span class="string">"Number of Observations"</span>);
+ylabel(<span class="string">"Variance"</span>);
+legend(<span class="string">"\lambda = 0.35"</span>, <span class="string">"\lambda = 0.7"</span>, <span class="string">"\lambda = 1.0"</span>);
+xlim([5,15]);
+subplot(1,2,2);
+plot(obs, rayleigh_aplha_1(3,:), obs, rayleigh_aplha_2(3,:), obs, rayleigh_aplha_3(3,:));
+title(<span class="string">"Variance for Rayleigh"</span>);
+xlabel(<span class="string">"Number of Observations"</span>);
+ylabel(<span class="string">"Variance"</span>);
+legend(<span class="string">"\alpha = 0.35"</span>, <span class="string">"\alpha = 0.7"</span>, <span class="string">"\alpha = 1.0"</span>);
+</pre><img vspace="5" hspace="5" src="Project3_01.png" alt=""> <img vspace="5" hspace="5" src="Project3_02.png" alt=""> <img vspace="5" hspace="5" src="Project3_03.png" alt=""> <h2 id="3">Question 2</h2><pre class="codeinput"><span class="comment">%loading data</span>
+load <span class="string">data.mat</span>;
+size = (size(data,2));
+
+<span class="comment">%Calculating each distributions parameters</span>
+exponential_parameter = size./ sum(data, 2);
+rayleigh_parameter = sqrt(.5 * mean(data.^2, 2));
+
+<span class="comment">%Variance of data</span>
+data_variance = var(data);
+disp(<span class="string">"Variance of data is : "</span> + data_variance);
+<span class="comment">%Variance(Exponential) = 1 / parameter^2</span>
+Variance_Exponential = 1 / exponential_parameter^2;
+disp(<span class="string">"Variance of Exponential Distribution with parameter "</span> + exponential_parameter +<span class="string">" is :  "</span> + Variance_Exponential);
+
+<span class="comment">%Variance(Rayleigh) = (4 - pi)/2 * parameter^2</span>
+Variance_Rayleigh = (4 - pi)/2 * rayleigh_parameter^2;
+disp(<span class="string">"Variance of Rayleigh Distribution given parameter  "</span> +  rayleigh_parameter +<span class="string">" is :  "</span> + Variance_Rayleigh);
+
+fprintf([<span class="string">'\nSince the variance of the data (%f) is more closer to the variance of a\ntheoretical Rayleigh distribution (%f),'</span>,<span class="keyword">...</span>
+         <span class="string">'then that of the variance of a theoretical \nExponential disitribution (%f), then data was most likely,'</span>,<span class="keyword">...</span>
+         <span class="string">' drawn from a Rayleigh distribution'</span>], data_variance,Variance_Rayleigh, Variance_Exponential);
+</pre><pre class="codeoutput">Variance of data is : 0.004195
+Variance of Exponential Distribution with parameter 7.7948 is :  0.016458
+Variance of Rayleigh Distribution given parameter  0.10161 is :  0.0044313
+
+Since the variance of the data (0.004195) is more closer to the variance of a
+theoretical Rayleigh distribution (0.004431),then that of the variance of a theoretical 
+Exponential disitribution (0.016458), then data was most likely, drawn from a Rayleigh distribution</pre><h2 id="4">Functions</h2><pre class="codeinput"><span class="comment">%This function generates a matrix that contains the MSE, bias, and variance</span>
+<span class="comment">%of an exponential disitribution given the the number of samples,</span>
+<span class="comment">%number of observations, and a lambda value.</span>
+<span class="keyword">function</span> [Matrix] = generate_exponential(N,obs,lambda)
+    len = length(obs);
+    Matrix = zeros(3,len);
+    <span class="keyword">for</span> i = 1 : len
+        distribution = exprnd(1/lambda, [N,(obs(i))]); <span class="comment">%creating a exponential distribution</span>
+        lambda_hat =  obs(i)./ sum(distribution ,2);  <span class="comment">%lambda_hat</span>
+        Matrix(1,i) = mean((lambda - lambda_hat).^2); <span class="comment">%MSE</span>
+        Matrix(2,i) = mean(lambda_hat) - lambda; <span class="comment">%Bias</span>
+        Matrix(3,i) = var(lambda_hat); <span class="comment">%Variance</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%This function generates a matrix that contains the MSE, bias, and variance</span>
+<span class="comment">%of a Rayleigh disitribution given the the number of samples,</span>
+<span class="comment">%number of observations, and a lambda value.</span>
+<span class="keyword">function</span> [Matrix] = generate_rayleigh(N,obs,alpha)
+    len = length(obs);
+    Matrix = zeros(3,len);
+    <span class="keyword">for</span> i = 1 : len
+        rayleigh = raylrnd(alpha, [N,(obs(i))]); <span class="comment">%creating a rayleigh distribution</span>
+        alpha_hat = sqrt(.5 *mean(rayleigh.^2,2));  <span class="comment">%alpha_hat</span>
+        Matrix(1,i) = mean((alpha - alpha_hat).^2); <span class="comment">%MSE</span>
+        Matrix(2,i)  = mean(alpha_hat) - alpha; <span class="comment">%Bias</span>
+        Matrix(3,i) = var(alpha_hat); <span class="comment">%Variance</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2020a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%Ahmad Malik    4/5/22
+%ECE302-1
+%Keene
+%Project 3
+
+clc; clear; close all;
+
+
+%% Question 1
+
+%number of samples
+N = 5e5;  
+%number of observations 
+obs = 5:15;
+%alpha and lambda parameters
+alpha = [0.35, 0.7, 1];
+lambda = [0.35, 0.7, 1];
+
+%generating the MSE, Bias, and Variance of each distribution given the
+%parameters above. This is done using the two generating functions.
+exponential_lambda_1 = generate_exponential(N, obs,lambda(1));
+exponential_lambda_2 = generate_exponential(N, obs,lambda(2));
+exponential_lambda_3 = generate_exponential(N, obs,lambda(3));
+rayleigh_aplha_1 = generate_rayleigh(N,obs,alpha(1));
+rayleigh_aplha_2 = generate_rayleigh(N,obs,alpha(2));
+rayleigh_aplha_3 = generate_rayleigh(N,obs,alpha(3));
+
+%Subplot that compares each distributions MSE
+figure;
+subplot(1,2,1);
+plot(obs, exponential_lambda_1(1,:), obs, exponential_lambda_2(1,:), obs,exponential_lambda_3(1,:));
+title("MSE for Exponential");
+xlabel("Number of Observations");
+ylabel("MSE");
+legend("\lambda = 0.35" , "\lambda = 0.7" ,"\lambda = 1.0");
+xlim([5,15]);
+subplot(1,2,2);
+plot(obs, rayleigh_aplha_1(1,:), obs, rayleigh_aplha_2(1,:), obs, rayleigh_aplha_3(1,:));
+title("MSE for Rayleigh");
+xlabel("Number of Observations");
+ylabel("MSE");
+legend("\alpha = 0.35" ,"\alpha = 0.7", "\alpha = 1.0");
+
+%Subplot that compares each distributions Bias
+figure;
+subplot(1,2,1);
+plot(obs, exponential_lambda_1(2,:), obs, exponential_lambda_2(2,:), obs,exponential_lambda_3(2,:));
+title("Bias for Exponential");
+xlabel("Number of Observations");
+ylabel("Bias");
+legend("\lambda = 0.35", "\lambda = 0.7", "\lambda = 1.0");
+xlim([5,15]);
+subplot(1,2,2);
+plot(obs, rayleigh_aplha_1(2,:), obs, rayleigh_aplha_2(2,:), obs, rayleigh_aplha_3(2,:));
+title("Bias for Rayleigh");
+xlabel("Number of Observations");
+ylabel("Bias");
+legend("\alpha = 0.35", "\alpha = 0.7", "\alpha = 1.0");
+
+%Subplot that compares each distributions Variance
+figure;
+subplot(1,2,1);
+plot(obs, exponential_lambda_1(3,:), obs, exponential_lambda_2(3,:), obs,exponential_lambda_3(3,:));
+title("Variance for Exponential");
+xlabel("Number of Observations");
+ylabel("Variance");
+legend("\lambda = 0.35", "\lambda = 0.7", "\lambda = 1.0");
+xlim([5,15]);
+subplot(1,2,2);
+plot(obs, rayleigh_aplha_1(3,:), obs, rayleigh_aplha_2(3,:), obs, rayleigh_aplha_3(3,:));
+title("Variance for Rayleigh");
+xlabel("Number of Observations");
+ylabel("Variance");
+legend("\alpha = 0.35", "\alpha = 0.7", "\alpha = 1.0");
+
+
+%% Question 2
+
+%loading data
+load data.mat; 
+size = (size(data,2)); 
+
+%Calculating each distributions parameters 
+exponential_parameter = size./ sum(data, 2);                  
+rayleigh_parameter = sqrt(.5 * mean(data.^2, 2));
+
+%Variance of data
+data_variance = var(data);
+disp("Variance of data is : " + data_variance);
+%Variance(Exponential) = 1 / parameter^2
+Variance_Exponential = 1 / exponential_parameter^2;
+disp("Variance of Exponential Distribution with parameter " + exponential_parameter +" is :  " + Variance_Exponential);
+
+%Variance(Rayleigh) = (4 - pi)/2 * parameter^2
+Variance_Rayleigh = (4 - pi)/2 * rayleigh_parameter^2;   
+disp("Variance of Rayleigh Distribution given parameter  " +  rayleigh_parameter +" is :  " + Variance_Rayleigh);
+
+fprintf(['\nSince the variance of the data (%f) is more closer to the variance of a\ntheoretical Rayleigh distribution (%f),',... 
+         'then that of the variance of a theoretical \nExponential disitribution (%f), then data was most likely,',...
+         ' drawn from a Rayleigh distribution'], data_variance,Variance_Rayleigh, Variance_Exponential);
+
+     
+%% Functions
+
+%This function generates a matrix that contains the MSE, bias, and variance
+%of an exponential disitribution given the the number of samples,
+%number of observations, and a lambda value.
+function [Matrix] = generate_exponential(N,obs,lambda)
+    len = length(obs);
+    Matrix = zeros(3,len);
+    for i = 1 : len
+        distribution = exprnd(1/lambda, [N,(obs(i))]); %creating a exponential distribution 
+        lambda_hat =  obs(i)./ sum(distribution ,2);  %lambda_hat
+        Matrix(1,i) = mean((lambda - lambda_hat).^2); %MSE 
+        Matrix(2,i) = mean(lambda_hat) - lambda; %Bias
+        Matrix(3,i) = var(lambda_hat); %Variance
+    end
+end
+
+%This function generates a matrix that contains the MSE, bias, and variance
+%of a Rayleigh disitribution given the the number of samples,
+%number of observations, and a lambda value.
+function [Matrix] = generate_rayleigh(N,obs,alpha)
+    len = length(obs);
+    Matrix = zeros(3,len);
+    for i = 1 : len
+        rayleigh = raylrnd(alpha, [N,(obs(i))]); %creating a rayleigh distribution
+        alpha_hat = sqrt(.5 *mean(rayleigh.^2,2));  %alpha_hat        
+        Matrix(1,i) = mean((alpha - alpha_hat).^2); %MSE
+        Matrix(2,i)  = mean(alpha_hat) - alpha; %Bias
+        Matrix(3,i) = var(alpha_hat); %Variance
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
